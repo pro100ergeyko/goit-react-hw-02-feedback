@@ -7,8 +7,6 @@ import {
   StatisticsTitle,
 } from './Container.styled';
 
-// import { Feedback } from './Feedback/Feedback';
-
 export class App extends Component {
   state = {
     good: 0,
@@ -34,13 +32,16 @@ export class App extends Component {
     }));
   };
 
+  countTotalFeedback = ({ good, neutral, bad }) => good + neutral + bad;
+  countPositiveFeedbackPercentage = ({ good }) =>
+    Math.round((good * 100) / this.countTotalFeedback(this.state));
+
   render() {
     const { good, neutral, bad } = this.state;
 
     return (
       <Container>
         <FeedbackTitle>Pleese leave feedback</FeedbackTitle>
-        {/* <Feedback good={good} neutral={neutral} bad={bad} /> */}
         <FeedbackBtnContainer>
           <button onClick={this.handleLeaveGoodFeedback}>Good </button>
           <button onClick={this.handleLeaveNeutralFeedback}>Neutral</button>
@@ -51,6 +52,11 @@ export class App extends Component {
           <p>Good: {good}</p>
           <p>Neutral: {neutral}</p>
           <p>Bad: {bad}</p>
+          <p>Total: {this.countTotalFeedback(this.state)}</p>
+          <p>
+            Positive feedback:{' '}
+            {this.countPositiveFeedbackPercentage(this.state)}%
+          </p>
         </StatisticsContainer>
       </Container>
     );
