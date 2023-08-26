@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const StatisticsList = styled.ul`
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-size: 20px;
+  gap: 20px;
 `;

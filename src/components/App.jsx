@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  FeedbackTitle,
-  FeedbackBtnContainer,
-  StatisticsContainer,
-  StatisticsTitle,
-} from './Container.styled';
+import { Container } from './Container.styled';
+import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
+import { Statistics } from './Statistics/Statistics';
 
 export class App extends Component {
   state = {
@@ -14,50 +10,63 @@ export class App extends Component {
     bad: 0,
   };
 
-  handleLeaveGoodFeedback = () => {
-    this.setState(prevState => ({
-      good: prevState.good + 1,
-    }));
+  countTotalFeedback = ({ good, neutral, bad } = this.state) => {
+    return good + neutral + bad;
   };
 
-  handleLeaveNeutralFeedback = () => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1,
-    }));
+  countPositiveFeedbackPercentage = ({ countTotalFeedback, state } = this) => {
+    const total = countTotalFeedback();
+
+    if (total) {
+      const positiveFeedback = Math.round((state.good / total) * 100);
+
+      return `${positiveFeedback}%`;
+    } else {
+      return '0%';
+    }
   };
 
-  handleLeaveBedFeedback = () => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1,
-    }));
-  };
+  onLeaveFeedback = evt => {
+    this.setState(prevState => {
+      switch (evt.target.id) {
+        case 'good':
+          return {
+            good: prevState.good + 1,
+          };
 
-  countTotalFeedback = ({ good, neutral, bad }) => good + neutral + bad;
-  countPositiveFeedbackPercentage = ({ good }) =>
-    Math.round((good * 100) / this.countTotalFeedback(this.state));
+        case 'neutral':
+          return {
+            neutral: prevState.neutral + 1,
+          };
+
+        case 'bad':
+          return {
+            bad: prevState.bad + 1,
+          };
+
+        default:
+          return prevState;
+      }
+    });
+  };
 
   render() {
     const { good, neutral, bad } = this.state;
 
     return (
       <Container>
-        <FeedbackTitle>Pleese leave feedback</FeedbackTitle>
-        <FeedbackBtnContainer>
-          <button onClick={this.handleLeaveGoodFeedback}>Good </button>
-          <button onClick={this.handleLeaveNeutralFeedback}>Neutral</button>
-          <button onClick={this.handleLeaveBedFeedback}>Bad</button>
-        </FeedbackBtnContainer>
-        <StatisticsContainer>
-          <StatisticsTitle>Statistics</StatisticsTitle>
-          <p>Good: {good}</p>
-          <p>Neutral: {neutral}</p>
-          <p>Bad: {bad}</p>
-          <p>Total: {this.countTotalFeedback(this.state)}</p>
-          <p>
-            Positive feedback:{' '}
-            {this.countPositiveFeedbackPercentage(this.state)}%
-          </p>
-        </StatisticsContainer>
+        <FeedbackOptions
+          options={['good', 'neutral', 'bad']}
+          onLeaveFeedback={this.onLeaveFeedback}
+        />
+
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={this.countTotalFeedback()}
+          positivePercentage={this.countPositiveFeedbackPercentage()}
+        />
       </Container>
     );
   }
