@@ -3,6 +3,8 @@ import { Container } from './Container.styled';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Statistics } from './Statistics/Statistics';
 
+const feedbackOptions = ['good', 'neutral', 'bad'];
+
 export class App extends Component {
   state = {
     good: 0,
@@ -56,7 +58,7 @@ export class App extends Component {
     return (
       <Container>
         <FeedbackOptions
-          options={['good', 'neutral', 'bad']}
+          options={feedbackOptions}
           onLeaveFeedback={this.onLeaveFeedback}
         />
 

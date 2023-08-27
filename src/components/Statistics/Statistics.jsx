@@ -16,12 +16,12 @@ export const Statistics = ({
 
       {total > 0 && (
         <StatisticsList>
-          <StatisticListItem name="Good" value={good} />
-          <StatisticListItem name="Neutral" value={neutral} />
-          <StatisticListItem name="Bad" value={bad} />
-          <StatisticListItem name="Total" value={total} />
+          <StatisticListItem name="good" value={good} />
+          <StatisticListItem name="neutral" value={neutral} />
+          <StatisticListItem name="bad" value={bad} />
+          <StatisticListItem name="total" value={total} />
           <StatisticListItem
-            name="Positive feedback"
+            name="positive feedback"
             value={positivePercentage}
           />
         </StatisticsList>
