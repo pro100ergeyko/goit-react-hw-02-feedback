@@ -3,8 +3,6 @@ import { Container } from './Container.styled';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Statistics } from './Statistics/Statistics';
 
-const feedbackOptions = ['good', 'neutral', 'bad'];
-
 export class App extends Component {
   state = {
     good: 0,
@@ -12,44 +10,22 @@ export class App extends Component {
     bad: 0,
   };
 
-  countTotalFeedback = ({ good, neutral, bad } = this.state) => {
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+
     return good + neutral + bad;
   };
 
-  countPositiveFeedbackPercentage = ({ countTotalFeedback, state } = this) => {
-    const total = countTotalFeedback();
+  countPositiveFeedbackPercentage = () => {
+    const { good } = this.state;
 
-    if (total) {
-      const positiveFeedback = Math.round((state.good / total) * 100);
-
-      return `${positiveFeedback}%`;
-    } else {
-      return '0%';
-    }
+    return `${Math.round((good / this.countTotalFeedback()) * 100)}%` || '0%';
   };
 
-  onLeaveFeedback = evt => {
-    this.setState(prevState => {
-      switch (evt.target.id) {
-        case 'good':
-          return {
-            good: prevState.good + 1,
-          };
-
-        case 'neutral':
-          return {
-            neutral: prevState.neutral + 1,
-          };
-
-        case 'bad':
-          return {
-            bad: prevState.bad + 1,
-          };
-
-        default:
-          return prevState;
-      }
-    });
+  onLeaveFeedback = options => {
+    this.setState(prevState => ({
+      [options]: prevState[options] + 1,
+    }));
   };
 
   render() {
@@ -58,7 +34,7 @@ export class App extends Component {
     return (
       <Container>
         <FeedbackOptions
-          options={feedbackOptions}
+          options={['good', 'neutral', 'bad']}
           onLeaveFeedback={this.onLeaveFeedback}
         />
 
